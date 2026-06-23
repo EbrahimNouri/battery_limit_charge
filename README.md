@@ -64,3 +64,25 @@ set-battery-limit --help
 1. **The CLI Core:** Modifies the specific kernel ACPI battery registers under `/sys/class/` in real-time.
 2. **The Cache:** Saves your selected threshold inside `/etc/battery_limit.conf`.
 3. **The Systemd Service:** Triggers a fast `oneshot` daemon at boot time to read your cached setting and feed it back to your hardware.
+
+
+#!/usr/bin/env bash
+set -e
+
+echo "Installing ASUS TUF Battery CLI..."
+
+# Download or create the files locally
+sudo curl -sSL https://githubusercontent.com -o /usr/local/bin/set-battery-limit
+sudo curl -sSL https://githubusercontent.com-apply -o /usr/local/bin/set-battery-limit-apply
+sudo curl -sSL https://githubusercontent.com -o /etc/systemd/system/battery-limit.service
+
+# Give permissions
+sudo chmod +x /usr/local/bin/set-battery-limit
+sudo chmod +x /usr/local/bin/set-battery-limit-apply
+
+# Enable background service
+sudo systemctl daemon-reload
+sudo systemctl enable battery-limit.service
+
+echo "Installation complete! Type 'sudo set-battery-limit --help' to start."
+
